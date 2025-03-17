@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "797890251537",
+    "firebase_url": "https://pbl5-f76af-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "pbl5-f76af",
+    "storage_bucket": "pbl5-f76af.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797890251537:android:60edc259b00a91d9859ab0",
+        "android_client_info": {
+          "package_name": "com.example.pbl5"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5F5mGLdhthanMvXxxB5unkXhxNCEA9OE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
