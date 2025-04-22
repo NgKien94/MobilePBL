@@ -4,16 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".view.FragmentHistory">
+    tools:context=".view.FragmentHistory"
+    >
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="#FF0000"
-        android:text="FRAGMENT HISTORY" />
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerWarnings"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:scrollbars="vertical"
+        />
 </FrameLayout>

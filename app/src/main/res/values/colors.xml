@@ -5,4 +5,6 @@
     <color name="theme_bottom_nav">#F0F0F0</color>
     <color name="nav_selected">#1176D4</color>
     <color name="nav_none_selected">#495250</color>
+    <color name="speed_warning_bg">#FAE1E1</color>
+    <color name="traffic_sign_bg">#FEFEDF</color>
 </resources>
