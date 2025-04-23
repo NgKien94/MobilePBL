@@ -33,6 +33,8 @@ class FragmentHistory : Fragment(R.layout.fragment_history) {
 
         viewModel.warnings.observe(viewLifecycleOwner) {warningList ->
             warningAdapter.updateData(warningList)
+            binding.recyclerWarnings.scrollToPosition(warningAdapter.getItemCount() - 1)
+            // cuộn về item cuối danh sách mỗi khi có item mới
         }
     }
 

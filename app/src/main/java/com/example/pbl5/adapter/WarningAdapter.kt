@@ -4,6 +4,7 @@ import android.media.Image
 import  android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -15,6 +16,8 @@ import com.example.pbl5.model.Warning
 
 class WarningAdapter(private var warnings: List<Warning>) :
     RecyclerView.Adapter<WarningAdapter.WarningViewHolder>() {
+
+   // private var lastAnimatedPosition = -1  // phục vụ mục đích cuộn cho item mới vừa được tạo
 
     class WarningViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imWarningIcon: ImageView
@@ -62,6 +65,15 @@ class WarningAdapter(private var warnings: List<Warning>) :
 
         viewHolder.tvInfo.text = warnings[position].info
         viewHolder.tvTimestamp.text = warnings[position].timestamp
+
+       // // 💥 Animate chỉ khi item là mới được thêm (position > lastAnimatedPosition)
+//        val currentPosition = viewHolder.adapterPosition
+//        if (currentPosition != RecyclerView.NO_POSITION && currentPosition > lastAnimatedPosition) {
+//            val animation = AnimationUtils.loadAnimation(viewHolder.itemView.context, R.anim.item_slide_in_right)
+//            viewHolder.itemView.startAnimation(animation)
+//            lastAnimatedPosition = currentPosition
+//        }
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
