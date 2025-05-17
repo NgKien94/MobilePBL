@@ -33,14 +33,14 @@ class FragmentSpeed : Fragment(R.layout.fragment_speed) {
             binding.currentSpeed.text = "$speed\nkm/h"
             when{
                speed in 1.. 40 -> {
-                    binding.currentSpeed.setTextColor(Color.parseColor("#69e882"))
+                    binding.currentSpeed.setTextColor(Color.parseColor("#4CAF50"))
                 }
                speed in 41..60 ->{
-                    binding.currentSpeed.setTextColor(Color.parseColor("#ecfc03"))
+                    binding.currentSpeed.setTextColor(Color.parseColor("#FFBF20"))
                 }
 
                 speed > 60 ->{
-                    binding.currentSpeed.setTextColor(Color.parseColor("#e32910"))
+                    binding.currentSpeed.setTextColor(Color.parseColor("#E53935"))
                 }
             }
         }

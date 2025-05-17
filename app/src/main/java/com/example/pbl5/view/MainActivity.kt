@@ -35,8 +35,8 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(FragmentSpeed())
                     true
                 }
-                R.id.nav_exit ->{
-                    finish()
+                R.id.nav_dashboard ->{
+                    replaceFragment(FragmentDashboard())
                     true
                 }
                 else -> {

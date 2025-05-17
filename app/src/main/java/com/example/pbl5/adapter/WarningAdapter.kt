@@ -11,19 +11,20 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pbl5.R
 import com.example.pbl5.model.Warning
-
+import android.graphics.Color
 
 
 class WarningAdapter(private var warnings: List<Warning>) :
     RecyclerView.Adapter<WarningAdapter.WarningViewHolder>() {
 
-   // private var lastAnimatedPosition = -1  // phục vụ mục đích cuộn cho item mới vừa được tạo
+   private var lastAnimatedPosition = -1  // phục vụ mục đích cuộn cho item mới vừa được tạo
 
     class WarningViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imWarningIcon: ImageView
         val tvType : TextView
         val tvInfo: TextView
         val tvTimestamp: TextView
+        val viewStripe: View
 
         init {
             // Define click listener for the ViewHolder's View
@@ -31,6 +32,7 @@ class WarningAdapter(private var warnings: List<Warning>) :
             tvType = itemView.findViewById(R.id.tv_type)
             tvInfo = itemView.findViewById(R.id.tv_info)
             tvTimestamp = itemView.findViewById(R.id.tv_timestamp)
+            viewStripe = itemView.findViewById(R.id.view_warningStripe)
         }
     }
 
@@ -49,14 +51,16 @@ class WarningAdapter(private var warnings: List<Warning>) :
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         if(warnings[position].type.equals("speed")){
-            viewHolder.imWarningIcon.setImageResource(R.drawable.speed_sign_icon)
+            viewHolder.imWarningIcon.setImageResource(R.drawable.warning_speed)
             viewHolder.tvType.text = "Speed Limit Exceeded"
-            viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context,R.color.speed_warning_bg))
+            viewHolder.viewStripe.setBackgroundColor(Color.parseColor("#ff2147"))
+
         }
         else if(warnings[position].type.equals("traffic-sign")){
-            viewHolder.imWarningIcon.setImageResource(R.drawable.traffic_sign_icon)
+            viewHolder.imWarningIcon.setImageResource(R.drawable.warning_traffic_sign)
             viewHolder.tvType.text = "Traffic Sign Detection"
-            viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context,R.color.traffic_sign_bg))
+            viewHolder.viewStripe.setBackgroundColor(Color.parseColor("#ffb400"))
+
         }
         else{
             viewHolder.imWarningIcon.setImageResource(R.drawable.fallback_icon)
@@ -67,12 +71,12 @@ class WarningAdapter(private var warnings: List<Warning>) :
         viewHolder.tvTimestamp.text = warnings[position].timestamp
 
        // // 💥 Animate chỉ khi item là mới được thêm (position > lastAnimatedPosition)
-//        val currentPosition = viewHolder.adapterPosition
-//        if (currentPosition != RecyclerView.NO_POSITION && currentPosition > lastAnimatedPosition) {
-//            val animation = AnimationUtils.loadAnimation(viewHolder.itemView.context, R.anim.item_slide_in_right)
-//            viewHolder.itemView.startAnimation(animation)
-//            lastAnimatedPosition = currentPosition
-//        }
+        val currentPosition = viewHolder.adapterPosition
+        if (currentPosition != RecyclerView.NO_POSITION && currentPosition > lastAnimatedPosition) {
+            val animation = AnimationUtils.loadAnimation(viewHolder.itemView.context, R.anim.item_slide_in_right)
+            viewHolder.itemView.startAnimation(animation)
+            lastAnimatedPosition = currentPosition
+        }
 
     }
 
