@@ -13,19 +13,17 @@ class WarningViewModel : ViewModel(){
     private val _warnings = MediatorLiveData<List<Warning>>()
     val warnings: LiveData<List<Warning>> = _warnings
 
-    // MediatorLiveData giúp quan sát nhiều nguồn LiveData khác nhau
-    // addSource giống như observe, xử lý dữ liệu cho list rồi cập nhật list mới
-
     init {
-        // Gộp dữ liệu từ repository và xử lý
         _warnings.addSource(repository.getWarning()) { rawList ->
-            val processedList = rawList.map { item ->
-                Warning(
-                    info = item.info,
-                    timestamp = item.timestamp,
-                    type = item.getTypeCategory()
-                )
-            }
+            val processedList = rawList
+                .filter { it.type != "speed_warn" } // lọc bỏ speed
+                .map { item ->
+                    Warning(
+                        info = item.info,
+                        timestamp = item.timestamp,
+                        type = item.getTypeCategory() // cắt hậu tố "_warn"
+                    )
+                }
             _warnings.value = processedList
         }
     }
