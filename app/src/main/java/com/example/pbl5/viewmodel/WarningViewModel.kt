@@ -12,20 +12,31 @@ class WarningViewModel : ViewModel(){
     private val repository = WarningRepository()
     private val _warnings = MediatorLiveData<List<Warning>>()
     val warnings: LiveData<List<Warning>> = _warnings
+    private val _spokenWarnings = mutableSetOf<String>()
+
 
     init {
         _warnings.addSource(repository.getWarning()) { rawList ->
             val processedList = rawList
-                .filter { it.type != "speed_warn" } // lọc bỏ speed
+                .filter { it.type == "traffic-sign_warn" } // lọc trước
                 .map { item ->
                     Warning(
                         info = item.info,
                         timestamp = item.timestamp,
-                        type = item.getTypeCategory() // cắt hậu tố "_warn"
+                        type = item.getTypeCategory() // cắt _warn nếu muốn hiển thị gọn
                     )
                 }
             _warnings.value = processedList
         }
     }
+
+    fun hasSpoken(warningId: String): Boolean {
+        return _spokenWarnings.contains(warningId)
+    }
+
+    fun markAsSpoken(warningId: String) {
+        _spokenWarnings.add(warningId)
+    }
+
 
 }

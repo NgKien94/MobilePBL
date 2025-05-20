@@ -27,14 +27,14 @@ class SpeedViewModel :ViewModel() {
     init {
         _speedWarnings.addSource(repositoryWarning.getWarning()) { rawList ->
             val filteredSpeedWarnings = rawList
+                .filter { it.type == "speed_warn" } // lọc trước
                 .map { warning ->
                     Warning(
                         info = warning.info,
                         timestamp = warning.timestamp,
-                        type = warning.getTypeCategory() // cắt hậu tố "_warn"
+                        type = warning.getTypeCategory() // nếu cần
                     )
                 }
-                .filter { it.type == "speed" } // lọc chỉ speed
             _speedWarnings.value = filteredSpeedWarnings
         }
     }
