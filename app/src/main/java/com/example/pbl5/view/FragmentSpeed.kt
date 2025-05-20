@@ -80,6 +80,7 @@ class FragmentSpeed : Fragment(R.layout.fragment_speed) {
 
         // Cài đặt recycler view
         warningAdapter = WarningAdapter(emptyList())
+
         binding.recyclerSpeedWarnings.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = warningAdapter

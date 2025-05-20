@@ -5,6 +5,8 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +14,9 @@ import com.example.pbl5.R
 import com.example.pbl5.adapter.WarningAdapter
 import com.example.pbl5.databinding.FragmentHistoryBinding
 import com.example.pbl5.databinding.FragmentSpeedBinding
+import com.example.pbl5.model.Warning
 import com.example.pbl5.utils.VibrationUtils
+import com.example.pbl5.utils.trafficSignDetails
 import com.example.pbl5.viewmodel.SpeedViewModel
 import com.example.pbl5.viewmodel.WarningViewModel
 
@@ -91,7 +95,9 @@ class FragmentHistory : Fragment(R.layout.fragment_history) {
         }
 
 
-        warningAdapter = WarningAdapter(emptyList())
+        warningAdapter = WarningAdapter(emptyList()) { warning ->
+            showTrafficSignDetails(warning)
+        }
         binding.recyclerWarnings.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = warningAdapter
@@ -103,17 +109,26 @@ class FragmentHistory : Fragment(R.layout.fragment_history) {
             binding.recyclerWarnings.scrollToPosition(warningAdapter.getItemCount() - 1)
             // cuộn về item cuối danh sách mỗi khi có item mới
 
-            warningAdapter.updateData(warningList)
-            binding.recyclerWarnings.scrollToPosition(warningAdapter.itemCount - 1)
 
             // xử lý phát âm thanh
             if (warningList.isNotEmpty()) {
                 val latestWarning = warningList.last()
-                val infoParts = latestWarning.info.split("-").map { it.trim() }
-                if (infoParts.size >= 2) {
-                    val label = infoParts[1]  // "Tốc độ tối đa cho phép"
-                    if (selectedCategories.contains(label)) {
-                        playWarningSound(label)
+                val warningId = latestWarning.info + latestWarning.timestamp
+
+                // Nếu chưa xử lý cảnh báo này
+                if (!viewModel.hasSpoken(warningId)) {
+                    // Đánh dấu là đã xử lý NGAY LẬP TỨC, bất kể có phát âm hay không
+                    viewModel.markAsSpoken(warningId)
+
+                    // Phát âm thanh nếu phù hợp
+                    if (latestWarning.type == "traffic-sign") {
+                        val infoParts = latestWarning.info.split("-").map { it.trim() }
+                        if (infoParts.size >= 2) {
+                            val label = infoParts[1]
+                            if (selectedCategories.contains(label)) {
+                                playWarningSound(label)
+                            }
+                        }
                     }
                 }
             }
@@ -129,6 +144,47 @@ class FragmentHistory : Fragment(R.layout.fragment_history) {
         }
         mediaPlayer.start()
     }
+
+    private fun showTrafficSignDetails(warning: Warning) {
+        val infoParts = warning.info.split("-").map { it.trim() }
+        if (infoParts.isNotEmpty()) {
+            val signCode = infoParts[0]  // ví dụ "P123a"
+            val signInfo = trafficSignDetails[signCode]
+
+            if (signInfo != null) {
+                val dialogView = layoutInflater.inflate(R.layout.dialog_traffic_sign_detail, null)
+
+                val imgTrafficSign = dialogView.findViewById<ImageView>(R.id.imgTrafficSign)
+                val tvDescription = dialogView.findViewById<TextView>(R.id.tvDescription)
+                val tvFine = dialogView.findViewById<TextView>(R.id.tvFine)
+
+                imgTrafficSign.setImageResource(signInfo.imageResId)
+                tvDescription.text = "Mô tả: ${signInfo.description}"
+                tvFine.text = "Mức phạt: ${signInfo.fine}"
+
+                androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                    .setTitle("Chi tiết biển báo")
+                    .setView(dialogView)
+                    .setPositiveButton("Đóng", null)
+                    .show()
+            } else {
+                // Fallback khi không tìm thấy thông tin biển báo
+                androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                    .setTitle("Chi tiết biển báo")
+                    .setMessage("Không có thông tin chi tiết cho biển báo này.")
+                    .setPositiveButton("Đóng", null)
+                    .show()
+            }
+        } else {
+            // Trường hợp infoParts rỗng, cũng có thể thông báo fallback
+            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Chi tiết biển báo")
+                .setMessage("Dữ liệu biển báo không hợp lệ.")
+                .setPositiveButton("Đóng", null)
+                .show()
+        }
+    }
+
 
 
     override fun onDestroyView() {

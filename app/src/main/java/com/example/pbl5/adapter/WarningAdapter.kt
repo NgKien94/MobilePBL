@@ -14,7 +14,9 @@ import com.example.pbl5.model.Warning
 import android.graphics.Color
 
 
-class WarningAdapter(private var warnings: List<Warning>) :
+class WarningAdapter(private var warnings: List<Warning>,
+                     private val onItemClick: ((Warning) -> Unit)? = null
+) :
     RecyclerView.Adapter<WarningAdapter.WarningViewHolder>() {
 
    private var lastAnimatedPosition = -1  // phục vụ mục đích cuộn cho item mới vừa được tạo
@@ -47,16 +49,16 @@ class WarningAdapter(private var warnings: List<Warning>) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: WarningViewHolder, position: Int) {
-
+        val warning = warnings[position]
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        if(warnings[position].type.equals("speed")){
+        if(warning.type.equals("speed")){
             viewHolder.imWarningIcon.setImageResource(R.drawable.warning_speed)
             viewHolder.tvType.text = "Speed Limit Exceeded"
             viewHolder.viewStripe.setBackgroundColor(Color.parseColor("#ff2147"))
 
         }
-        else if(warnings[position].type.equals("traffic-sign")){
+        else if(warning.type.equals("traffic-sign")){
             viewHolder.imWarningIcon.setImageResource(R.drawable.warning_traffic_sign)
             viewHolder.tvType.text = "Traffic Sign Detection"
             viewHolder.viewStripe.setBackgroundColor(Color.parseColor("#ffb400"))
@@ -76,6 +78,13 @@ class WarningAdapter(private var warnings: List<Warning>) :
             val animation = AnimationUtils.loadAnimation(viewHolder.itemView.context, R.anim.item_slide_in_right)
             viewHolder.itemView.startAnimation(animation)
             lastAnimatedPosition = currentPosition
+        }
+
+        //  Click chỉ khi type là "traffic-sign"
+        viewHolder.itemView.setOnClickListener {
+            if (warning.type.equals("traffic-sign")) {
+                onItemClick?.invoke(warning)
+            }
         }
 
     }
