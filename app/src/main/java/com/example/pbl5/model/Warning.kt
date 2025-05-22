@@ -1,5 +1,9 @@
 package com.example.pbl5.model
 
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 class Warning{
     var info: String = ""
     var timestamp: String = ""
@@ -10,6 +14,14 @@ class Warning{
         this.info = info
         this.timestamp = timestamp
         this.type = type
+    }
+    fun getTimestampAsDate(): Date? {
+        return try {
+            val sdf = SimpleDateFormat("HH:mm:ss dd/MM/yyyy", Locale.getDefault())
+            sdf.parse(this.timestamp)
+        } catch (e: Exception) {
+            null
+        }
     }
 
     fun getTypeCategory(): String {

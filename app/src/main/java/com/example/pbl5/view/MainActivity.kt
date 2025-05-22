@@ -27,9 +27,9 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigation = binding.bottomNavBar
 
-        // default: show speed fragment
-        bottomNavigation.selectedItemId = R.id.nav_speed
-        replaceFragment(FragmentSpeed())
+        // default: show dashboard fragment
+        bottomNavigation.selectedItemId = R.id.nav_dashboard
+        replaceFragment(FragmentDashboard())
 
 
         bottomNavigation.setOnItemSelectedListener { menuItem ->
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 else -> {
-                    replaceFragment(FragmentSpeed())
+                    replaceFragment(FragmentDashboard())
                     true
                 }
             }
