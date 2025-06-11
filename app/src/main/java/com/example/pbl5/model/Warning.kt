@@ -17,7 +17,7 @@ class Warning{
     }
     fun getTimestampAsDate(): Date? {
         return try {
-            val sdf = SimpleDateFormat("HH:mm:ss dd/MM/yyyy", Locale.getDefault())
+            val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
             sdf.parse(this.timestamp)
         } catch (e: Exception) {
             null

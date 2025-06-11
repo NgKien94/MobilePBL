@@ -51,18 +51,21 @@ class FragmentSpeed : Fragment(R.layout.fragment_speed) {
         viewModel.speed.observe(viewLifecycleOwner) { speed ->
             binding.currentSpeed.text = "$speed\nkm/h"
             when{
-               speed in 1.. 40 -> {
+               speed in 1 until 40 -> {
                     binding.currentSpeed.setTextColor(Color.parseColor("#4CAF50"))
                    VibrationUtils.cancelVibration(requireContext())
                    isVibrating = false
                 }
-               speed in 41..60 ->{
+               speed in 40 .. 59 ->{
                     binding.currentSpeed.setTextColor(Color.parseColor("#FFBF20"))
-                   VibrationUtils.cancelVibration(requireContext())
-                   isVibrating = false
+                   if (isVibrating == false) {
+                       val patternCaution = longArrayOf(0, 500, 1000) // Rung 500ms, nghỉ 1000ms
+                       VibrationUtils.vibrateWithPattern(requireContext(), patternCaution, 0)
+                       isVibrating = true
+                   }
                 }
 
-                speed > 60 ->{
+                speed >= 60 ->{
                     binding.currentSpeed.setTextColor(Color.parseColor("#E53935"))
                     if (isVibrating == false) {
                         val pattern = longArrayOf(0, 500, 1000) // Rung 500ms, nghỉ 1000ms

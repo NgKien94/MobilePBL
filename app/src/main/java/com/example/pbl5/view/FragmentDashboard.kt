@@ -45,7 +45,7 @@ class FragmentDashboard : Fragment(R.layout.fragment_dashboard) {
             val statusText = binding.tvStatusValue
 
             when {
-                speed in 1..40 -> {
+                speed in 1 until 40 -> {
                     statusText.text = "Safe Driving"
                     statusText.setTextColor(Color.parseColor("#34C759")) // green
                     statusLayout.setBackgroundColor(Color.parseColor("#DFFFE0"))
@@ -53,14 +53,15 @@ class FragmentDashboard : Fragment(R.layout.fragment_dashboard) {
                     VibrationUtils.cancelVibration(requireContext())
                 }
 
-                speed in 41..60 -> {
+                speed in 40..59 -> {
                     statusText.text = "Caution"
                     statusText.setTextColor(Color.parseColor("#FF9500")) // orange
                     statusLayout.setBackgroundColor(Color.parseColor("#FFF3CD"))
-                    VibrationUtils.cancelVibration(requireContext())
+                    val patternCaution = longArrayOf(0, 500, 1000) // Rung 500ms, nghỉ 1000ms
+                    VibrationUtils.vibrateWithPattern(requireContext(), patternCaution, 0)
                 }
 
-                speed > 60 -> {
+                speed >= 60 -> {
                     statusText.text = "Danger"
                     statusText.setTextColor(Color.parseColor("#FF3B30")) // red
                     statusLayout.setBackgroundColor(Color.parseColor("#F8D7DA"))

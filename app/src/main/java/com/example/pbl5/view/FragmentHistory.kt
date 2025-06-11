@@ -32,14 +32,17 @@ class FragmentHistory : Fragment(R.layout.fragment_history) {
     private lateinit var warningAdapter: WarningAdapter
     private val categories = arrayOf(
         "Cấm đi ngược chiều", "Cấm xe ô tô", "Tốc độ tối đa cho phép",
-        "Cấm rẽ trái", "Cấm rẽ phải"
+        "Cấm dừng xe và đỗ xe", "Cấm đỗ xe","Cấm quay đầu xe","Đường người đi bộ cắt ngang","Đi chậm"
     )
     private val warningSoundMap = mapOf(
         "Cấm đi ngược chiều" to R.raw.traffic_p102,
         "Cấm xe ô tô" to R.raw.traffic_p103a,
         "Tốc độ tối đa cho phép" to R.raw.traffic_p127,
-        "Cấm rẽ trái" to R.raw.traffic_p123a,
-        "Cấm rẽ phải" to R.raw.traffic_p123b
+        "Cấm dừng xe và đỗ xe" to R.raw.traffic_p130,
+        "Cấm đỗ xe" to R.raw.traffic_p131a,
+        "Cấm quay đầu xe" to R.raw.traffic_p124a,
+        "Đường người đi bộ cắt ngang" to R.raw.traffic_w224,
+        "Đi chậm" to R.raw.traffic_w245a
     )
 
     private val selectedCategories = mutableSetOf<String>()  // các mục đã chọn
@@ -74,14 +77,15 @@ class FragmentHistory : Fragment(R.layout.fragment_history) {
         viewModelSpeed.speed.observe(viewLifecycleOwner) { speed ->
 
             when{
-                speed in 1.. 40 -> {
+                speed in 1 until 40 -> {
                     VibrationUtils.cancelVibration(requireContext())
                 }
-                speed in 41..60 ->{
-                    VibrationUtils.cancelVibration(requireContext())
+                speed in 40..59 ->{
+                    val patternCaution = longArrayOf(0, 500, 1000) // Rung 500ms, nghỉ 1000ms
+                    VibrationUtils.vibrateWithPattern(requireContext(), patternCaution, 0)
                 }
 
-                speed > 60 ->{
+                speed >= 60 ->{
 
                         val pattern = longArrayOf(0, 500, 1000) // Rung 500ms, nghỉ 1000ms
                         VibrationUtils.vibrateWithPattern(requireContext(), pattern, 0)
